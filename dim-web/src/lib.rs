@@ -7,10 +7,10 @@ pub mod routes;
 pub mod tree;
 
 pub use axum;
+use axum::Router;
 use axum::extract::{ConnectInfo, State};
 use axum::response::Response;
 use axum::routing::{delete, get, patch, post};
-use axum::Router;
 
 use dim_core::core::EventTx;
 use dim_core::stream_tracking::StreamTracking;
@@ -219,23 +219,17 @@ pub async fn start_webserver(
 
     let router = axum::Router::new()
         .route("/api/v1/auth/whoami", get(routes::auth::whoami))
-        .route_layer(axum::middleware::from_fn_with_state(
-            conn.clone(),
-            verify_cookie_token,
-        ))
-        // --- End of routes authenticated by Axum middleware ---
-        .merge(auth_routes(app.clone()))
-        .merge(library_routes(app.clone()))
         .route("/api/v1/dashboard", get(routes::dashboard::dashboard))
         .route("/api/v1/dashboard/banner", get(routes::dashboard::banners))
         .route("/api/v1/search", get(routes::search::search))
         .route(
+            "/api/v1/filebrowser/",
+            get(routes::filebrowser::get_directory_structure),
+        )
+        .route(
             "/api/v1/filebrowser/*path",
             get(routes::filebrowser::get_directory_structure),
         )
-        .route("/images/*path", get(routes::statik::get_image))
-        .merge(media_routes(app.clone()))
-        .merge(stream_routes(app.clone()))
         .route(
             "/api/v1/mediafile/:id",
             get(routes::mediafile::get_mediafile_info),
@@ -268,6 +262,16 @@ pub async fn start_webserver(
             "/api/v1/auth/token/:token",
             delete(routes::auth::delete_token),
         )
+        .merge(library_routes(app.clone()))
+        .merge(media_routes(app.clone()))
+        .merge(stream_routes(app.clone()))
+        .route_layer(axum::middleware::from_fn_with_state(
+            conn.clone(),
+            verify_cookie_token,
+        ))
+        // --- End of routes authenticated by Axum middleware ---
+        .merge(auth_routes(app.clone()))
+        .route("/images/*path", get(routes::statik::get_image))
         .route("/", get(routes::statik::react_routes))
         .route("/*path", get(routes::statik::react_routes))
         .route("/static/*path", get(routes::statik::dist_static))
