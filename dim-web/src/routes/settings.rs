@@ -1,16 +1,16 @@
 use crate::AppState;
+use axum::Extension;
 use axum::extract::Json;
 use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::response::Response;
-use axum::Extension;
 
 use dim_core::settings;
-use dim_core::settings::{set_global_settings, GlobalSettings};
+use dim_core::settings::{GlobalSettings, set_global_settings};
+use dim_database::DatabaseError;
 use dim_database::user::UpdateableUser;
 use dim_database::user::User;
 use dim_database::user::UserSettings;
-use dim_database::DatabaseError;
 
 use super::auth::AuthError;
 

@@ -3,10 +3,10 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use axum::extract::{Path, Query, State};
-use axum::response::{IntoResponse, Response};
 use axum::Extension;
 use axum::Json;
+use axum::extract::{Path, Query, State};
+use axum::response::{IntoResponse, Response};
 
 use dim_core::errors::DimError;
 use dim_core::scanner::daemon::FsWatcher;
@@ -18,14 +18,14 @@ use dim_database::user::User;
 
 use dim_extern_api::tmdb::TMDBMetadataProvider;
 
-use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
+use fuzzy_matcher::skim::SkimMatcherV2;
 use http::StatusCode;
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::error::DimErrorWrapper;
 use crate::AppState;
+use crate::error::DimErrorWrapper;
 
 /// Method maps to `POST /api/v1/library`, it adds a new library to the database, starts a new
 /// scanner for it, then dispatches a event to all clients notifying them that a new library has

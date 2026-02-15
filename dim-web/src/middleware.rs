@@ -16,7 +16,7 @@ pub async fn verify_cookie_token<B>(
                 Err(_) => {
                     return Err(DimErrorWrapper(DimError::DatabaseError {
                         description: String::from("Failed to start transaction"),
-                    }))
+                    }));
                 }
             };
             let id = dim_database::user::Login::verify_cookie(token.to_str().unwrap().to_string())

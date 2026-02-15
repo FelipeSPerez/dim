@@ -20,20 +20,20 @@
 //! [`login`]: fn@login
 
 use crate::AppState;
+use axum::Extension;
 use axum::extract::Json;
 use axum::extract::Path;
 use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::response::Response;
-use axum::Extension;
 
+use dim_database::DatabaseError;
 use dim_database::asset::Asset;
 use dim_database::progress::Progress;
-use dim_database::user::verify;
 use dim_database::user::InsertableUser;
 use dim_database::user::Login;
 use dim_database::user::User;
-use dim_database::DatabaseError;
+use dim_database::user::verify;
 
 use displaydoc::Display;
 use http::StatusCode;

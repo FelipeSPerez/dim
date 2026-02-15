@@ -1,17 +1,17 @@
 //! This module contains all docs and APIs related to users and user metadata.
 use crate::AppState;
-use axum::extract::multipart::Field;
+use axum::Extension;
 use axum::extract::Json;
 use axum::extract::Multipart;
 use axum::extract::State;
+use axum::extract::multipart::Field;
 use axum::response::IntoResponse;
 use axum::response::Response;
-use axum::Extension;
 
+use dim_database::DatabaseError;
 use dim_database::asset::Asset;
 use dim_database::asset::InsertableAsset;
 use dim_database::user::User;
-use dim_database::DatabaseError;
 
 use displaydoc::Display;
 use http::StatusCode;

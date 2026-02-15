@@ -4,9 +4,9 @@ use axum::extract::Path;
 use axum::extract::State;
 use axum::response::IntoResponse;
 
+use dim_database::DatabaseError;
 use dim_database::episode::{Episode, UpdateEpisode};
 use dim_database::season::{Season, UpdateSeason};
-use dim_database::DatabaseError;
 
 use http::StatusCode;
 

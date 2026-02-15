@@ -1,10 +1,11 @@
 use crate::AppState;
+use axum::Extension;
 use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::response::Json;
 use axum::response::Response;
-use axum::Extension;
 
+use dim_database::DatabaseError;
 use dim_database::episode::Episode;
 use dim_database::genre::Genre;
 use dim_database::library::MediaType;
@@ -12,7 +13,6 @@ use dim_database::media::Media;
 use dim_database::mediafile::MediaFile;
 use dim_database::progress::Progress;
 use dim_database::user::User;
-use dim_database::DatabaseError;
 
 use super::auth::AuthError;
 

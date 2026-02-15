@@ -1,21 +1,22 @@
 use crate::AppState;
+use axum::Extension;
 use axum::extract::Json;
 use axum::extract::Path;
 use axum::extract::Query;
 use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::response::Response;
-use axum::Extension;
 
 use chrono::Datelike;
 
+use dim_core::scanner::MediaMatcher;
+use dim_core::scanner::WorkUnit;
 use dim_core::scanner::movie;
 use dim_core::scanner::parse_filenames;
 use dim_core::scanner::tv_show;
-use dim_core::scanner::MediaMatcher;
-use dim_core::scanner::WorkUnit;
 use dim_core::tree;
 
+use dim_database::DatabaseError;
 use dim_database::compact_mediafile::CompactMediafile;
 use dim_database::episode::Episode;
 use dim_database::genre::Genre;
@@ -25,10 +26,9 @@ use dim_database::media::UpdateMedia;
 use dim_database::mediafile::MediaFile;
 use dim_database::progress::Progress;
 use dim_database::user::User;
-use dim_database::DatabaseError;
 
-use dim_extern_api::tmdb::TMDBMetadataProvider;
 use dim_extern_api::ExternalQueryIntoShow;
+use dim_extern_api::tmdb::TMDBMetadataProvider;
 
 use dim_utils::json;
 use dim_utils::secs_to_pretty;
@@ -229,10 +229,12 @@ pub async fn get_media_by_id(
 
             result.dedup_by_key(|x| x.media_id);
 
-            json!(result
-                .iter()
-                .map(|x| (x.media_id.unwrap(), mediafile_tags(x)))
-                .collect::<HashMap<_, _>>())
+            json!(
+                result
+                    .iter()
+                    .map(|x| (x.media_id.unwrap(), mediafile_tags(x)))
+                    .collect::<HashMap<_, _>>()
+            )
         }
     };
 
