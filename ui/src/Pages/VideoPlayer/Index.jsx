@@ -226,7 +226,9 @@ function VideoPlayer() {
       if (!video.gid) return;
 
       (async () => {
-        await fetch(`/api/v1/stream/${video.gid}/state/kill`);
+        await fetch(`/api/v1/stream/${video.gid}/state/kill`, {
+          method: "DELETE",
+        });
         sessionStorage.clear();
       })();
     };

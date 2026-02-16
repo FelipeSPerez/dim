@@ -31,7 +31,7 @@ function ErrorBox() {
       <h2>Error</h2>
       <div className="separator" />
       <p>{error.msg}</p>
-      {error.errors.map((err: string, i: number) => (
+      {error.errors?.map((err: string, i: number) => (
         <details key={i}>
           <summary>({++i})</summary>
           <div className="stderr">
