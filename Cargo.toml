@@ -8,6 +8,7 @@ members = [
     "dim-extern-api",
     "dim-web",
     "dim-utils",
+    "nightfall",
 ]
 
 [workspace.package]
