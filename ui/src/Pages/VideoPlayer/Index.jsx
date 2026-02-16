@@ -317,9 +317,8 @@ function VideoPlayer() {
             <NextVideo id={nextEpisodeId} showAfter={showNextVideoAfter} />
           )}
           {!error && manifest.loaded && video.canPlay && <VideoControls />}
-          {(!error & (manifest.loading || !video.canPlay) || video.waiting) && (
-            <RingLoad />
-          )}
+          {((!error && (manifest.loading || !video.canPlay)) ||
+            video.waiting) && <RingLoad />}
           {!error &&
             manifest.loaded &&
             video.canPlay &&
