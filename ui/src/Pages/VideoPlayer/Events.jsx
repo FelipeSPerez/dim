@@ -4,6 +4,8 @@ import { MediaPlayer } from "dashjs";
 
 import { VideoPlayerContext } from "./Context";
 
+import { store } from "../../store";
+
 import {
   setManifestState,
   updateTrack,
@@ -116,9 +118,18 @@ function VideoEvents() {
         return;
       }
 
+      const token = store.getState().auth.token;
+
       (async () => {
         console.log("[VIDEO] fetching stderr");
-        const res = await fetch(`/api/v1/stream/${video.gid}/state/get_stderr`);
+        const res = await fetch(
+          `/api/v1/stream/${video.gid}/state/get_stderr`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         const error = await res.json();
 
         dispatch(
