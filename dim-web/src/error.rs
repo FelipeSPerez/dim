@@ -1,5 +1,6 @@
 use axum::response::IntoResponse;
 use axum::response::Response;
+use axum::Json;
 use dim_core::errors::DimError;
 use dim_database::DatabaseError;
 use http::StatusCode;
@@ -66,6 +67,6 @@ impl IntoResponse for DimErrorWrapper {
         };
 
         let error_message = self.0.to_string();
-        (status_code, error_message).into_response()
+        (status_code, Json(serde_json::json!({ "error": error_message }))).into_response()
     }
 }
