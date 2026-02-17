@@ -72,8 +72,6 @@ RUN apt-get update && apt-get install -y \
     libvorbis0a \
     libvorbisenc2 \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=ffmpeg /static/ffmpeg /opt/dim/utils/ffmpeg
-COPY --from=ffmpeg /static/ffprobe /opt/dim/utils/ffprobe
 COPY --from=dim /dim/target/dim /opt/dim/dim
 
 EXPOSE 8000

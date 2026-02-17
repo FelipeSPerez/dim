@@ -16,8 +16,3 @@ macro_rules! opt_update {
         }
     }
 }
-
-#[cfg(debug_assertions)]
-pub fn ffpath(bin: impl AsRef<str>) -> &'static str {
-    Box::leak(bin.as_ref().to_string().into_boxed_str())
-}

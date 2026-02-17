@@ -17,12 +17,12 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let _ = std::fs::create_dir_all(dim::utils::ffpath("config"));
+    let _ = std::fs::create_dir_all("config");
 
     let config_path = args
         .config
         .map(|x| x.to_string_lossy().to_string())
-        .unwrap_or(dim::utils::ffpath("config/config.toml"));
+        .unwrap_or("config/config.toml".to_string());
 
     // initialize global settings.
     dim::init_global_settings(Some(config_path)).expect("Failed to initialize global settings.");

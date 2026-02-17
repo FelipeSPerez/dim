@@ -109,7 +109,7 @@ impl TranscodingProfile for AacTranscodeProfile {
         args.append(&mut vec!["-hls_segment_type".into(), "1".into()]);
         args.append(&mut vec![
             "-loglevel".into(),
-            "info".into(),
+            "error".into(),
             "-progress".into(),
             "pipe:1".into(),
         ]);

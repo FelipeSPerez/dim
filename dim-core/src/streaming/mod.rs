@@ -1,26 +1,7 @@
 pub mod ffprobe;
 
-use cfg_if::cfg_if;
-
-use std::collections::HashMap;
-use std::sync::Arc;
-use std::sync::RwLock;
-
-use crate::utils::ffpath;
-
-lazy_static::lazy_static! {
-    pub static ref STREAMING_SESSION: Arc<RwLock<HashMap<String, HashMap<String, String>>>> = Arc::new(RwLock::new(HashMap::new()));
-    pub static ref FFMPEG_BIN: &'static str = Box::leak(ffpath("utils/ffmpeg").into_boxed_str());
-    pub static ref FFPROBE_BIN: &'static str = {
-        cfg_if! {
-            if #[cfg(test)] {
-                "/usr/bin/ffprobe"
-            } else {
-                Box::leak(ffpath("utils/ffprobe").into_boxed_str())
-            }
-        }
-    };
-}
+pub const FFMPEG_BIN: &str = "ffmpeg";
+pub const FFPROBE_BIN: &str = "ffprobe";
 
 use std::process::Command;
 
@@ -44,7 +25,7 @@ use std::process::Command;
 pub fn ffcheck() -> Vec<Result<Box<str>, &'static str>> {
     let mut results = vec![];
 
-    for program in [*FFMPEG_BIN, *FFPROBE_BIN].iter() {
+    for program in [FFMPEG_BIN, FFPROBE_BIN].iter() {
         if let Ok(output) = Command::new(program).arg("-version").output() {
             let stdout = String::from_utf8(output.stdout)
                 .expect("Failed to decode subprocess stdout.")

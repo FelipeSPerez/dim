@@ -1,5 +1,3 @@
-use crate::utils::ffpath;
-
 use std::error::Error;
 use std::fs::File;
 use std::fs::OpenOptions;
@@ -77,7 +75,7 @@ pub fn get_global_settings() -> GlobalSettings {
 }
 
 pub fn init_global_settings(path: Option<String>) -> Result<(), Box<dyn Error>> {
-    let path = path.unwrap_or(ffpath("config/config.toml"));
+    let path = path.unwrap_or("config/config.toml".to_string());
     let _ = SETTINGS_PATH.set(path.clone());
     let mut content = String::new();
     OpenOptions::new()
@@ -98,7 +96,7 @@ pub fn set_global_settings(settings: GlobalSettings) -> Result<(), Box<dyn Error
     let path = SETTINGS_PATH
         .get()
         .cloned()
-        .unwrap_or(ffpath("config/config.toml"));
+        .unwrap_or("config/config.toml".to_string());
     {
         let mut lock = GLOBAL_SETTINGS.lock().unwrap();
         *lock = settings;

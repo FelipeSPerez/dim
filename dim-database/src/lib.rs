@@ -1,8 +1,6 @@
 // FIXME: We have a shim in dim/utils but we cant depend on dim because itd be a circular dep.
 #![deny(warnings)]
 
-use crate::utils::ffpath;
-
 use std::str::FromStr;
 use std::sync::atomic::AtomicBool;
 use std::sync::atomic::Ordering;
@@ -157,13 +155,13 @@ pub async fn get_conn_logged() -> sqlx::Result<DbConnection> {
 async fn internal_get_conn() -> sqlx::Result<DbConnection> {
     let rw_only = sqlx::sqlite::SqliteConnectOptions::new()
         .create_if_missing(true)
-        .filename(ffpath("config/dim.db"))
+        .filename("config/dim.db")
         .connect()
         .await?;
 
     let rd_only = sqlx::pool::PoolOptions::new()
         .connect_with(
-            sqlx::sqlite::SqliteConnectOptions::from_str(ffpath("config/dim.db"))?
+            sqlx::sqlite::SqliteConnectOptions::from_str("config/dim.db")?
                 .read_only(true)
                 .synchronous(sqlx::sqlite::SqliteSynchronous::Normal)
                 .create_if_missing(true),

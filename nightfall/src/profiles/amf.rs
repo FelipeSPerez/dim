@@ -86,7 +86,7 @@ impl TranscodingProfile for AmfTranscodeProfile {
         args.append(&mut vec!["-hls_segment_type".into(), 1.to_string()]);
         args.append(&mut vec![
             "-loglevel".into(),
-            "info".into(),
+            "error".into(),
             "-progress".into(),
             "pipe:1".into(),
         ]);

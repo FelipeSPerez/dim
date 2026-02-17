@@ -89,7 +89,7 @@ impl TranscodingProfile for H264TransmuxProfile {
         args.append(&mut vec!["-hls_segment_type".into(), 1.to_string()]);
         args.append(&mut vec![
             "-loglevel".into(),
-            "info".into(),
+            "error".into(),
             "-progress".into(),
             "pipe:1".into(),
         ]);
@@ -219,7 +219,7 @@ impl TranscodingProfile for H264TranscodeProfile {
         args.append(&mut vec!["-hls_segment_type".into(), 1.to_string()]);
         args.append(&mut vec![
             "-loglevel".into(),
-            "info".into(),
+            "error".into(),
             "-progress".into(),
             "pipe:1".into(),
         ]);
