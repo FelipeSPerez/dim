@@ -1,7 +1,18 @@
+# ATTENTION!!
+This is a fork from [Dusk-Labs/dim](https://github.com/Dusk-Labs/dim)
+
+At first I was thinking about just contributing to the project but I just kept finding errors and stuff I didn't like.
+Also their repo seems dead now so this will probably ended being its own project.
+
+## RIGHT NOW ITS BROKEN
+Sorry. You can't use it right now.
+
+At least on my x86_64 laptop and RISC-V SBC with different versions of linux the streaming part its not working.
+I'll delete this part from the README when its working.
+
 <h1 align="center">Dim</h1>
 
 ![Dashboard](docs/design/dashboard.jpg)
-[![Discord](https://img.shields.io/discord/834495310332035123)](https://discord.gg/gBPyQ7NVah)
 
 Dim is a self-hosted media manager. With minimal setup, Dim will organize and beautify your media collections, letting you access and play them anytime from anywhere.
 
