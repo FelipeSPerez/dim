@@ -36,27 +36,6 @@ You can then obtain binaries from the release tab in github:
 2. Run `cd release && ./dim`
 3. Then you can access the Dim web UI through your browser with `http://0.0.0.0:8000` (assuming it's running locally.)
 
-## Running with docker
-
-The following command runs dim on port 8000, storing configuration in `$HOME/.config/dim`.
-You may change that path if you'd like to store configuration somewhere else.
-You can mount as many directories containing media as you like by repeating the `-v HOST_PATH:CONTAINER_PATH` option.
-In this example, the path `/media` on the host is made available at the same path inside the Docker container.
-This name "media" is arbitrary and you can choose whatever you like.
-
-```
-docker run -d -p 8000:8000/tcp -v $HOME/.config/dim:/opt/dim/config -v /media:/media:ro ghcr.io/dusk-labs/dim:dev
-```
-Mutiarch image resides at `ghcr.io/dusk-labs/dim:master`
-
-To use hardware acceleration, mount the relevant device:
-
-```
-docker run -d -p 8000:8000/tcp -v $HOME/.config/dim:/opt/dim/config -v /media:/media:ro --device=/dev/dri/renderD128 ghcr.io/dusk-labs/dim:dev
-```
-
-Refer to [docker-compose-template.yaml](https://github.com/Dusk-Labs/dim/blob/master/docker-compose-template.yml) to run dim using Docker Compose.
-
 ## Running from source
 
 ### Dependencies
