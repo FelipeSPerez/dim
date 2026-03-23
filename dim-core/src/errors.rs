@@ -25,7 +25,7 @@ pub enum DimError {
     Unauthenticated,
     /// Invalid Media type supplied.
     InvalidMediaType,
-    /// An error in the streaming module has occured
+    /// An error in the streaming module has occured: {0}
     #[error(transparent)]
     StreamingError(#[from] StreamingErrors),
     /// User has no permission to access this route.
