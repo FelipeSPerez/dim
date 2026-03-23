@@ -158,11 +158,7 @@ fn settings_routes(AppState { .. }: AppState) -> Router<AppState> {
     Router::new()
         .route(
             "/api/v1/user/settings",
-            get(|| async { "User settings - needs actual implementation" }),
-        )
-        .route(
-            "/api/v1/user/settings",
-            post(|| async { "User settings post - needs actual implementation" }),
+            get(routes::settings::get_user_settings).post(routes::settings::post_user_settings),
         )
 }
 
