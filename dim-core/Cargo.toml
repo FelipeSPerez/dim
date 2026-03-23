@@ -1,6 +1,5 @@
 [package]
 name = "dim-core"
-build = "src/build.rs"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
