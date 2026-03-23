@@ -209,12 +209,12 @@ impl VirtualManifest {
         w.end_element();
 
         if matches!(self.content_type, ContentType::Audio | ContentType::Video) {
-            w.end_element(); // close AdapationSet
+            w.end_element(); // close AdaptationSet
         }
     }
 
     fn compile_sub(&self, w: &mut XmlWriter) {
-        w.start_element("AdapationSet");
+        w.start_element("AdaptationSet");
         w.write_attribute("mimeType", &self.mime);
         w.write_attribute("id", &self.set_id);
 
