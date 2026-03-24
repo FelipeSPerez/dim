@@ -105,7 +105,7 @@ function VideoSubtitles() {
     )
       return;
 
-    let prev = 0;
+    let prev = "";
 
     console.log("[Subtitles] preparing subtitle track", tracks[current]);
 
