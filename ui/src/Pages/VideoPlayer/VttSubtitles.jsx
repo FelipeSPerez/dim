@@ -11,11 +11,12 @@ import "./Subtitles.scss";
 function VideoSubtitles() {
   const dispatch = useDispatch();
 
-  const { video, current, tracks, ready } = useSelector((store) => ({
+  const { video, current, tracks, ready, token } = useSelector((store) => ({
     video: store.video,
     current: store.video.tracks.subtitle.current,
     tracks: store.video.tracks.subtitle.list,
     ready: store.video.tracks.subtitle.ready,
+    token: store.auth.token,
   }));
   const isVtt = tracks[current]?.chunk_path?.endsWith("vtt");
 
@@ -56,6 +57,7 @@ function VideoSubtitles() {
         setShow(true);
       } else {
         setShow(false);
+        dispatch(updateVideo({ currentCue: [] }));
       }
     },
     [dispatch]
@@ -80,7 +82,7 @@ function VideoSubtitles() {
     const newTrack = document.createElement("track");
 
     newTrack.kind = "subtitles";
-    newTrack.track.mode = video.textTrackEnabled ? "showing" : "hidden";
+    newTrack.track.mode = "hidden"; // we render cues ourselves in the React div
 
     console.log("[Subtitles] created and appended new track");
     videoRef.current.appendChild(newTrack);
@@ -112,7 +114,9 @@ function VideoSubtitles() {
     const intervalID = setInterval(async () => {
       const videoSubTrack = videoRef.current.textTracks[0];
 
-      const req = await fetch(`/api/v1/stream/${tracks[current].chunk_path}`);
+      const req = await fetch(`/api/v1/stream/${tracks[current].chunk_path}`, {
+        headers: { Authorization: token },
+      });
       const text = await req.text();
 
       const diff = text.split(prev).join("");
@@ -158,6 +162,7 @@ function VideoSubtitles() {
     video.textTrackEnabled,
     videoRef,
     isVtt,
+    token,
   ]);
 
   useEffect(() => {
@@ -190,6 +195,7 @@ function VideoSubtitles() {
 
     if (track) {
       track.addEventListener("cuechange", handleCueChange);
+      return () => track.removeEventListener("cuechange", handleCueChange);
     }
   }, [handleCueChange, ready, video.canPlay, videoRef, isVtt]);
 

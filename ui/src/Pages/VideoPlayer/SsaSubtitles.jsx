@@ -8,9 +8,10 @@ import JASSUB from "jassub";
 import "./Subtitles.scss";
 
 function VideoSubtitles() {
-  const { video, subtitle } = useSelector((store) => ({
+  const { video, subtitle, token } = useSelector((store) => ({
     video: store.video,
     subtitle: store.video.tracks.subtitle,
+    token: store.auth.token,
   }));
 
   const currentSub = subtitle.list[subtitle.current];
@@ -40,7 +41,6 @@ function VideoSubtitles() {
 
     const options = {
       video: videoRef.current,
-      subUrl: chunk_path,
       dropAllBlur: !JASSUB._supportsSIMD,
       workerUrl: new URL(
         "jassub/dist/jassub-worker.js",
@@ -58,7 +58,11 @@ function VideoSubtitles() {
       fonts: ["/static/default.woff2"],
     };
 
-    setJASSUB(new JASSUB(options));
+    const instance = new JASSUB(options);
+    fetch(chunk_path, { headers: { Authorization: token } })
+      .then((res) => res.text())
+      .then((content) => instance.setTrack(content));
+    setJASSUB(instance);
 
     return () => {
       console.log("[subtitle] disposing of jassub ctx");
@@ -78,8 +82,10 @@ function VideoSubtitles() {
     const chunk_path = `//${window.location.host}/api/v1/stream/${
       subtitle.list[subtitle.current].chunk_path
     }`;
-    jassub.setTrackByUrl(chunk_path);
-  }, [jassub, video.textTrackEnabled, video.prevSubs, subtitle, isAss]);
+    fetch(chunk_path, { headers: { Authorization: token } })
+      .then((res) => res.text())
+      .then((content) => jassub.setTrack(content));
+  }, [jassub, video.textTrackEnabled, video.prevSubs, subtitle, isAss, token]);
 
   useEffect(() => {
     if (jassub && !isAss) {
