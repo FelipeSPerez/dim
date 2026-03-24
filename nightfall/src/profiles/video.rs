@@ -46,7 +46,7 @@ impl TranscodingProfile for H264TransmuxProfile {
             "-vsync".into(),
             "passthrough".into(),
             "-avoid_negative_ts".into(),
-            "disabled".into(),
+            "make_non_negative".into(),
             "-max_muxing_queue_size".into(),
             "2048".into(),
         ]);
@@ -333,12 +333,12 @@ pub(super) fn get_discont_flags(ctx: &ProfileContext) -> Vec<String> {
     if ctx.output_ctx.start_num > 0 {
         vec![
             "-hls_segment_options".into(),
-            "movflags=frag_custom+dash+delay_moov+frag_discont".into(),
+            "movflags=frag_custom+empty_moov+default_base_moof+frag_discont".into(),
         ]
     } else {
         vec![
             "-hls_segment_options".into(),
-            "movflags=frag_custom+dash+delay_moov".into(),
+            "movflags=frag_custom+empty_moov+default_base_moof".into(),
         ]
     }
 }

@@ -121,7 +121,11 @@ pub async fn patch_init_segment(
         let mut segment = InitSegment::from_reader(&mut reader, size)?;
 
         let mut f = File::create(&segment_path)?;
-        while let Some(segment) = segment.segments.pop_front() {
+        while let Some(mut segment) = segment.segments.pop_front() {
+            // Strip sidx before writing: SidxBox::write_box in the mp4 crate omits the
+            // reference_count field and all reference entries, producing a box 14 bytes shorter
+            // than its claimed size and misaligning every subsequent box in the file.
+            segment.sidx = None;
             // Here we normalize the DTS to be equal to the EPT/PTS and we also set the corrent
             // segment number.
             segment

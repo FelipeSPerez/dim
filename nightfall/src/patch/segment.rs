@@ -186,6 +186,15 @@ pub async fn patch_segment(file: impl AsRef<Path> + Send + 'static, mut seq: u32
             ));
         }
 
+        // Segments produced with a sidx box must not be rewritten: SidxBox::write_box in the
+        // mp4 crate omits the reference_count field and all reference entries, so the written
+        // box is 14 bytes shorter than its claimed size. This misaligns every subsequent box
+        // in the file, causing MEDIA_ERR_DECODE in the browser. Sequence-number patching is
+        // not required for MSE playback, so skip the rewrite when sidx is present.
+        if segments.iter().any(|s| s.sidx.is_some()) {
+            return Ok(seq + segments.len() as u32);
+        }
+
         let mut f = File::create(&file)?;
         while let Some(segment) = segments.pop_front() {
             // Here we normalize the DTS to be equal to the EPT/PTS and we also set the corrent

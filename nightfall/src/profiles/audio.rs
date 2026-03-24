@@ -42,23 +42,43 @@ impl TranscodingProfile for AacTranscodeProfile {
             "aac".into(),
         ];
 
+        // Build the audio filter chain. Multiple -af flags are not additive; filters must be
+        // combined with commas into a single filtergraph.
+        let mut audio_filters: Vec<&str> = Vec::new();
+        let pan_filter;
         if ctx.input_ctx.audio_channels != ctx.output_ctx.audio_channels {
-            args.append(&mut vec![
-                "-af".into(),
-                "pan=stereo|FL=0.5*FC+0.707*FL+0.707*BL+0.5*LFE|FR=0.5*FC+0.707*FR+0.707*BR+0.5*LFE".into(),
-            ]);
+            pan_filter = "pan=stereo|FL=0.5*FC+0.707*FL+0.707*BL+0.5*LFE|FR=0.5*FC+0.707*FR+0.707*BR+0.5*LFE";
+            audio_filters.push(pan_filter);
+        }
+        // For the first segment only, force audio to start at PTS=0.  Without this, the AAC
+        // encoder priming delay causes segment 0 to be shorter than target_gop, leaving a gap
+        // (e.g. 0–3s of audio followed by a segment-1 TFDT at 5s) that stalls the player.
+        if ctx.output_ctx.start_num == 0 {
+            audio_filters.push("aresample=async=1:first_pts=0");
+        }
+        if !audio_filters.is_empty() {
+            args.push("-af".into());
+            args.push(audio_filters.join(","));
         }
 
         let ab = ctx.output_ctx.bitrate.unwrap_or(120_000).to_string();
         args.push("-ab".into());
         args.push(ab);
 
+        // make_zero zeroes all timestamps unconditionally — correct for the initial segment
+        // (shifts the small AAC encoder-delay negative DTS to exactly 0) but wrong for seeks
+        // (it would zero out the large positive source timestamps, placing audio at t=0 in
+        // the MSE SourceBuffer instead of the seek position, causing an immediate stall).
+        let avoid_neg = if ctx.output_ctx.start_num == 0 {
+            "make_zero"
+        } else {
+            "make_non_negative"
+        };
         args.append(&mut vec![
-            "-start_at_zero".into(),
             "-vsync".into(),
             "-1".into(),
             "-avoid_negative_ts".into(),
-            "make_non_negative".into(),
+            avoid_neg.into(),
         ]);
 
         args.append(&mut vec![
@@ -85,12 +105,12 @@ impl TranscodingProfile for AacTranscodeProfile {
         if ctx.output_ctx.start_num > 0 {
             args.append(&mut vec![
                 "-hls_segment_options".into(),
-                "movflags=frag_custom+dash+delay_moov+frag_discont".into(),
+                "movflags=frag_custom+empty_moov+default_base_moof+frag_discont".into(),
             ]);
         } else {
             args.append(&mut vec![
                 "-hls_segment_options".into(),
-                "movflags=frag_custom+dash+delay_moov".into(),
+                "movflags=frag_custom+empty_moov+default_base_moof".into(),
             ]);
         }
 
