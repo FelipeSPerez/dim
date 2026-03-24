@@ -312,7 +312,7 @@ function VideoPlayer() {
         <VideoEvents />
         <VideoMediaData />
         <video ref={videoRef} />
-        <VttSubtitles />+
+        <VttSubtitles />
         <SsaSubtitles />
         <div className="overlay" ref={overlay}>
           {!error && manifest.loaded && video.canPlay && <Menus />}
