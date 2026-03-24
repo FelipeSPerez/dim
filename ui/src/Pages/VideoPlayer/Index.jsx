@@ -205,7 +205,8 @@ function VideoPlayer() {
           ? defaultTracks[0]
           : trackList[0];
       const initialTracks = trackArr.filter(
-        (x) => x.id === defaultTrack.set_id
+        // x.id is a string from XML; defaultTrack.set_id is a number from JSON
+        (x) => x.id === String(defaultTrack.set_id)
       );
       console.log(
         `[${trackArr[0].type}] setting initial track to`,
