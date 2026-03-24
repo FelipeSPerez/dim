@@ -68,7 +68,7 @@ function VideoSubtitles() {
       console.log("[subtitle] disposing of jassub ctx");
       if (jassub) jassub.destroy();
     };
-  }, [video, videoRef, subtitle, isAss, setJASSUB, jassub]);
+  }, [video, videoRef, subtitle, isAss, setJASSUB, jassub, token]);
 
   useEffect(() => {
     if (
