@@ -189,7 +189,7 @@ impl TranscodingProfile for VaapiTranscodeProfile {
             vfilter.push("format=nv12".into());
 
             if !self.hw_scaling_supported() {
-                vfilter.push(format!("scale={}:{}", height, width));
+                vfilter.push(format!("scale={}:{}", width, height));
             }
 
             vfilter.push("hwupload".into());
