@@ -108,7 +108,7 @@ function VideoMenuSubSwitcher() {
             className={`track ${subtitleTracks.current === i ? "active" : ""}`}
             onClick={() => changeTrack(i)}
           >
-            <p>{track.title || "No title"}</p>
+            <p>{track.label || track.title || "No title"}</p>
           </div>
         ))}
       </div>
