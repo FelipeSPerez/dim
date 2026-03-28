@@ -7,10 +7,10 @@ pub mod routes;
 pub mod tree;
 
 pub use axum;
-use axum::Router;
 use axum::extract::{ConnectInfo, State};
 use axum::response::Response;
 use axum::routing::{delete, get, patch, post};
+use axum::Router;
 
 use dim_core::core::EventTx;
 use dim_core::stream_tracking::StreamTracking;
@@ -155,11 +155,10 @@ fn season_routes(_app: AppState) -> Router<AppState> {
 }
 
 fn settings_routes(AppState { .. }: AppState) -> Router<AppState> {
-    Router::new()
-        .route(
-            "/api/v1/user/settings",
-            get(routes::settings::get_user_settings).post(routes::settings::post_user_settings),
-        )
+    Router::new().route(
+        "/api/v1/user/settings",
+        get(routes::settings::get_user_settings).post(routes::settings::post_user_settings),
+    )
 }
 
 pub async fn start_webserver(
@@ -250,9 +249,10 @@ pub async fn start_webserver(
         .route("/api/v1/user", delete(routes::user::delete))
         .route("/api/v1/username", post(routes::user::change_username))
         .route("/api/v1/user/avatar", post(routes::user::upload_avatar))
+        .route("/api/v1/auth/invites", get(routes::auth::get_all_invites))
         .route(
-            "/api/v1/auth/invites",
-            get(routes::auth::get_all_invites).post(routes::auth::generate_invite),
+            "/api/v1/auth/new_invite",
+            post(routes::auth::generate_invite),
         )
         .route(
             "/api/v1/auth/token/:token",
