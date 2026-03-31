@@ -4,13 +4,22 @@ This is a fork from [Dusk-Labs/dim](https://github.com/Dusk-Labs/dim)
 At first I was thinking about just contributing to the project but I just kept finding errors and stuff I didn't like.
 Also their repo seems dead now so this will probably ended being its own project.
 
+# Warning!
+Right now I will focus on Linux only (I have no respect for windows or macos), feel free to contribute changes to change that as long as it doesn't make it more complex.
+
+# Goals
+ * Simplify streaming pipeline (gstreamer) []
+ * Replace UI components with components from a library (shadcn) []
+ * Replace sass with tailwindcss (no need for .scss files) []
+ * Delete redux and dispatch nonsense with Context (this app is not that complex) []
+ * Use fetch directly in the pages, for all API calls (no need for jumping around files) []
+ * Replace all typescript with javascript []
+
 <h1 align="center">Dim</h1>
 
 ![Dashboard](docs/design/dashboard.jpg)
 
 Dim is a self-hosted media manager. With minimal setup, Dim will organize and beautify your media collections, letting you access and play them anytime from anywhere.
-
-## Running from binaries
 
 ### Dependencies
 
@@ -24,12 +33,6 @@ Dim is a self-hosted media manager. With minimal setup, Dim will organize and be
 * libvorbisenc
 * libtheora0
 
-You can then obtain binaries from the release tab in github:
-
-1. Unpack with `unzip ./release-linux.zip && tar -xvzf ./release.tar.gz`
-2. Run `cd release && ./dim`
-3. Then you can access the Dim web UI through your browser with `http://0.0.0.0:8000` (assuming it's running locally.)
-
 ## Running from source
 
 ### Dependencies
@@ -37,8 +40,7 @@ You can then obtain binaries from the release tab in github:
 To run from source, you'll first need to install the following dependencies on your system:
 
 * sqlite
-* cargo
-* rustc (nightly)
+* cargo, rustc
 * yarn, npm
 * libssl-dev
 * libva2 (only if you're using Linux)
@@ -48,8 +50,11 @@ To run from source, you'll first need to install the following dependencies on y
 
 Once the dependencies are installed, clone the repository and build the project:
 
+### OS requirements
+
+
 ```
-git clone https://github.com/Dusk-Labs/dim
+git clone https://github.com/FelipeSPerez/dim
 ```
 
 If you're on Linux, run dim with:
